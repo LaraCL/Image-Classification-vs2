@@ -7,34 +7,75 @@
   <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
   <script src="util.js"></script>
   <style>
-    /* Stildefinitionen wie zuvor */
+    /* Stildefinitionen für die Drag-and-Drop-Zone */
+    #drop_zone {
+      width: 400px;
+      height: 200px;
+      border: 2px dashed #aaa;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #aaa;
+    }
+
+    /* Stildefinitionen für die Thumbnail-Anzeige */
+    #thumbnail {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    /* Stildefinitionen für die Ergebnisanzeige */
+    #result {
+      margin-top: 20px;
+    }
+
+    /* Stildefinitionen für die Buttons */
+    button {
+      margin-top: 10px;
+    }
+
+    /* Stildefinitionen für die Tabellen */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
   </style>
 </head>
 <body>
   <h1>Drag and Drop Image Classification</h1>
 
-  <!-- Upload-Bereich -->
-  <div id="uploadTitle">Upload der Bilddatei</div>
-  <div id="drop_zone">
+  <!-- Drag-and-Drop-Zone -->
+  <div id="drop_zone" ondragover="event.preventDefault()" ondrop="gotFile(event)">
     <p>Drag and Drop</p>
   </div>
 
-  <!-- Ergebnis-Anzeige -->
-  <div id="resultTitle">Anzeige des Ergebnisses nach dem Klassifizieren</div>
+  <!-- Ergebnisanzeige -->
   <div id="result"></div>
 
   <!-- Thumbnail-Anzeige -->
   <div id="thumbnail"></div>
 
-  <!-- Klassifizieren-Button und Auswahl-Buttons -->
+  <!-- Buttons für die Klassifizierung -->
   <button id="classifyButton">Klassifizieren</button>
-  <button id="correctButton">Richtig klassifiziert</button>
-  <button id="incorrectButton">Falsch klassifiziert</button>
+  <button id="correctButton" style="display: none;">Richtig klassifiziert</button>
+  <button id="incorrectButton" style="display: none;">Falsch klassifiziert</button>
 
   <!-- Tabellen für die letzten Klassifizierungen -->
   <h2>Zuletzt korrekt klassifizierte Fälle</h2>
   <table id="correctTable">
-    <!-- Tabellenkopf -->
     <thead>
       <tr>
         <th>Thumbnail</th>
@@ -42,13 +83,11 @@
         <th>Confidence</th>
       </tr>
     </thead>
-    <!-- Tabelleninhalt wird dynamisch mit JavaScript gefüllt -->
     <tbody id="correctBody"></tbody>
   </table>
 
   <h2>Zuletzt falsch klassifizierte Fälle</h2>
   <table id="incorrectTable">
-    <!-- Tabellenkopf -->
     <thead>
       <tr>
         <th>Thumbnail</th>
@@ -56,7 +95,6 @@
         <th>Confidence</th>
       </tr>
     </thead>
-    <!-- Tabelleninhalt wird dynamisch mit JavaScript gefüllt -->
     <tbody id="incorrectBody"></tbody>
   </table>
 
