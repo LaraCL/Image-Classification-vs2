@@ -77,6 +77,10 @@ function gotResult(error, results) {
       img.show(); // Bild sichtbar machen
       img.size(200, 200); // Größe festlegen
       img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
+
+      // Scrollen zur Ergebnis-Anzeige und Thumbnail
+      resultDiv.position(0, resultDiv.position().y); // Scrollen zum Ergebnis
+      thumbnailElement.position(0, thumbnailElement.position().y); // Scrollen zum Thumbnail
     }
   }
 }
