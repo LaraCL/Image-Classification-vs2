@@ -69,6 +69,15 @@ function gotResult(error, results) {
   } else {
     // Ergebnis anzeigen
     resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${nf(results[0].confidence, 0, 2)}`);
+
+    // Thumbnail im #thumbnail-Bereich anzeigen
+    if (img) {
+      let thumbnailElement = select('#thumbnail');
+      thumbnailElement.html(''); // Vorhandenes Inhalt löschen
+      img.show(); // Bild sichtbar machen
+      img.size(200, 200); // Größe festlegen
+      img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
+    }
   }
 }
 
