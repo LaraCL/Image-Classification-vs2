@@ -12,32 +12,24 @@
       padding: 20px;
     }
 
-    #uploadTitle {
+    #uploadTitle, #resultTitle {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 10px;
     }
 
-    #drop_zone {
+    #drop_zone, #result, #thumbnail {
       border: 2px dashed #aaa;
       padding: 20px;
       text-align: center;
       margin-bottom: 20px;
       color: #aaa;
+      width: 100%; /* Breite auf 100% des verfügbaren Bereichs setzen */
     }
 
-    #resultTitle {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    #result {
-      margin-bottom: 20px;
-    }
-
-    #thumbnail {
-      margin-bottom: 20px;
+    #thumbnail img {
+      max-width: 100%; /* Maximale Breite des Thumbnails auf 100% des verfügbaren Bereichs begrenzen */
+      height: auto; /* Automatische Höhe entsprechend der Breite beibehalten */
     }
   </style>
 </head>
@@ -53,9 +45,6 @@
   <!-- Ergebnis-Anzeige -->
   <div id="resultTitle">Anzeige des Ergebnisses nach dem Klassifizieren</div>
   <div id="result"></div>
-
-  <!-- Button zum manuellen Starten der Klassifizierung -->
-  <button id="classifyButton">Klassifizieren</button>
 
   <!-- Thumbnail-Anzeige -->
   <div id="thumbnail"></div>
