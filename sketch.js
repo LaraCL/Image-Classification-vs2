@@ -29,8 +29,16 @@ function gotFile(file) {
   if (file.type === 'image') {
     // Das Bild als p5.Image-Objekt laden und anzeigen
     img = createImg(file.data, 'Uploaded Image', '', () => {
-      img.size(200, 200);
-      img.position(20, 200);
+      img.hide(); // Das Bild vorübergehend ausblenden, um die Größe zu erhalten
+
+      // Größe des Thumbnails festlegen
+      let thumbnailSize = 200;
+      let x = (width - thumbnailSize) / 2; // X-Position zentrieren
+      let y = (height - thumbnailSize) / 2; // Y-Position zentrieren
+
+      // Bild anzeigen und zentriert positionieren
+      img.size(thumbnailSize, thumbnailSize);
+      img.position(x, y);
 
       // Klassifizierung des Bildes aufrufen
       classifier.classify(img.elt, gotResult);
