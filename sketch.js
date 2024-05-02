@@ -26,8 +26,6 @@ function setup() {
 }
 
 function gotFile(file) {
-  console.log('File received:', file);
-
   if (file.type === 'image') {
     // Das Bild als p5.Element-Objekt erstellen
     img = createImg(file.data, 'Uploaded Image', '', () => {
@@ -38,9 +36,6 @@ function gotFile(file) {
 
       // Berechne die Position des Thumbnails in der Mitte des drop_zone
       let dropZone = select('#drop_zone');
-      console.log('dropZone:', dropZone);
-
-      // Überprüfen, ob dropZone korrekt ausgewählt wurde
       if (dropZone) {
         let dropX = dropZone.position().x; // X-Position des drop_zone
         let dropY = dropZone.position().y; // Y-Position des drop_zone
@@ -50,9 +45,6 @@ function gotFile(file) {
         // Bild anzeigen und positionieren
         img.size(thumbnailSize, thumbnailSize);
         img.position(x, y);
-
-        // Klassifizierung des Bildes aufrufen
-        classifier.classify(img.elt, gotResult);
       } else {
         console.log('Drop zone not found.');
       }
@@ -64,6 +56,7 @@ function gotFile(file) {
 
 function classifyImage() {
   if (img) {
+    // Klassifizierung des Bildes aufrufen
     classifier.classify(img.elt, gotResult);
   } else {
     console.log('Es wurde noch kein Bild hochgeladen.');
