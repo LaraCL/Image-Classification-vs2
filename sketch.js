@@ -35,19 +35,17 @@ function gotFile(file) {
       let thumbnailSize = 200;
 
       // Berechne die Position des Thumbnails in der Mitte des drop_zone
-      let dropZone = select('#drop_zone');
-      if (dropZone) {
-        let dropX = dropZone.position().x; // X-Position des drop_zone
-        let dropY = dropZone.position().y; // Y-Position des drop_zone
-        let x = dropX + (dropZone.width - thumbnailSize) / 2; // X-Position zentrieren
-        let y = dropY + (dropZone.height - thumbnailSize) / 2; // Y-Position zentrieren
+      let dropX = dropZone.position().x;
+      let dropY = dropZone.position().y;
+      let x = dropX + (dropZone.width - thumbnailSize) / 2;
+      let y = dropY + (dropZone.height - thumbnailSize) / 2;
 
-        // Bild anzeigen und positionieren
-        img.size(thumbnailSize, thumbnailSize);
-        img.position(x, y);
-      } else {
-        console.log('Drop zone not found.');
-      }
+      // Bild anzeigen und positionieren
+      img.size(thumbnailSize, thumbnailSize);
+      img.position(x, y);
+
+      // Klassifizierung des Bildes aufrufen
+      classifier.classify(img.elt, gotResult);
     });
   } else {
     console.log('Es wurde keine Bilddatei hochgeladen.');
@@ -56,7 +54,6 @@ function gotFile(file) {
 
 function classifyImage() {
   if (img) {
-    // Klassifizierung des Bildes aufrufen
     classifier.classify(img.elt, gotResult);
   } else {
     console.log('Es wurde noch kein Bild hochgeladen.');
@@ -78,27 +75,9 @@ function gotResult(error, results) {
       img.size(200, 200); // Größe festlegen
       img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
 
-      // Scrollen zur Ergebnis-Anzeige und Thumbnail
-      resultDiv.position(0, resultDiv.position().y); // Scrollen zum Ergebnis
-      thumbnailElement.position(0, thumbnailElement.position().y); // Scrollen zum Thumbnail
+      // Speichern der Klassifizierung
+      let isCorrect = confirm('Ist die Klassifizierung korrekt?');
+      saveClassification(isCorrect, results[0].label, results[0].confidence);
     }
   }
 }
-
-function highlight() {
-  select('#drop_zone').style('background-color', '#eee');
-}
-
-function unhighlight() {
-  select('#drop_zone').style('background-color', '');
-}
-
-// Verhindern des Standardverhaltens beim Drag-and-Drop
-window.ondragover = function (e) {
-  e.preventDefault();
-  return false;
-};
-window.ondrop = function (e) {
-  e.preventDefault();
-  return false;
-};
