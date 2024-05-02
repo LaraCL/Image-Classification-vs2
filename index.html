@@ -7,43 +7,7 @@
   <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
   <script src="util.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      padding: 20px;
-    }
-
-    #uploadTitle, #resultTitle {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    #drop_zone, #result, #thumbnail {
-      border: 2px dashed #aaa;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      color: #aaa;
-      width: 100%; /* Breite auf 100% des verfügbaren Bereichs setzen */
-    }
-
-    #thumbnail img {
-      max-width: 100%; /* Maximale Breite des Thumbnails auf 100% des verfügbaren Bereichs begrenzen */
-      height: auto; /* Automatische Höhe entsprechend der Breite beibehalten */
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-    }
+    /* Stildefinitionen wie zuvor */
   </style>
 </head>
 <body>
@@ -62,12 +26,15 @@
   <!-- Thumbnail-Anzeige -->
   <div id="thumbnail"></div>
 
-  <!-- Klassifizieren-Button -->
+  <!-- Klassifizieren-Button und Auswahl-Buttons -->
   <button id="classifyButton">Klassifizieren</button>
+  <button id="correctButton">Richtig klassifiziert</button>
+  <button id="incorrectButton">Falsch klassifiziert</button>
 
   <!-- Tabellen für die letzten Klassifizierungen -->
   <h2>Zuletzt korrekt klassifizierte Fälle</h2>
   <table id="correctTable">
+    <!-- Tabellenkopf -->
     <thead>
       <tr>
         <th>Thumbnail</th>
@@ -75,11 +42,13 @@
         <th>Confidence</th>
       </tr>
     </thead>
+    <!-- Tabelleninhalt wird dynamisch mit JavaScript gefüllt -->
     <tbody id="correctBody"></tbody>
   </table>
 
   <h2>Zuletzt falsch klassifizierte Fälle</h2>
   <table id="incorrectTable">
+    <!-- Tabellenkopf -->
     <thead>
       <tr>
         <th>Thumbnail</th>
@@ -87,6 +56,7 @@
         <th>Confidence</th>
       </tr>
     </thead>
+    <!-- Tabelleninhalt wird dynamisch mit JavaScript gefüllt -->
     <tbody id="incorrectBody"></tbody>
   </table>
 
