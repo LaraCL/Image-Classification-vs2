@@ -27,16 +27,21 @@ function setup() {
 
 function gotFile(file) {
   if (file.type === 'image') {
-    // Das Bild als p5.Image-Objekt laden und anzeigen
+    // Das Bild als p5.Element-Objekt erstellen
     img = createImg(file.data, 'Uploaded Image', '', () => {
-      img.hide(); // Das Bild vorübergehend ausblenden, um die Größe zu erhalten
+      img.hide(); // Bild vorübergehend ausblenden
 
       // Größe des Thumbnails festlegen
       let thumbnailSize = 200;
-      let x = (width - thumbnailSize) / 2; // X-Position zentrieren
-      let y = (height - thumbnailSize) / 2; // Y-Position zentrieren
 
-      // Bild anzeigen und zentriert positionieren
+      // Berechne die Position des Thumbnails in der Mitte des drop_zone
+      let dropZone = select('#drop_zone');
+      let dropX = dropZone.position().x; // X-Position des drop_zone
+      let dropY = dropZone.position().y; // Y-Position des drop_zone
+      let x = dropX + (dropZone.width - thumbnailSize) / 2; // X-Position zentrieren
+      let y = dropY + (dropZone.height - thumbnailSize) / 2; // Y-Position zentrieren
+
+      // Bild anzeigen und positionieren
       img.size(thumbnailSize, thumbnailSize);
       img.position(x, y);
 
