@@ -22,7 +22,10 @@ function setup() {
   classifyButton.mousePressed(classifyImage);
 
   correctButton = select('#correctButton');
+  correctButton.mousePressed(() => { saveClassification(true); });
+
   incorrectButton = select('#incorrectButton');
+  incorrectButton.mousePressed(() => { saveClassification(false); });
 
   // Image Classifier mit MobileNet initialisieren
   classifier = ml5.imageClassifier('MobileNet', () => {
@@ -54,7 +57,7 @@ function gotResult(error, results) {
     console.error(error);
   } else {
     // Ergebnis anzeigen
-    resultDiv.html('');
+    resultDiv.html(''); // Vorheriges Ergebnis löschen
 
     // Thumbnail-Anzeige
     let thumbnailElement = select('#thumbnail');
@@ -65,10 +68,14 @@ function gotResult(error, results) {
 
     // Ergebnis in Tabellenform anzeigen
     let resultTable = createTable();
+    resultTable.addColumn('string');
+    resultTable.addColumn('string');
+    resultTable.addColumn('number');
+
     let row = resultTable.addRow();
-    row.addCell(`<img src="${img.elt.src}" width="100">`);
-    row.addCell(results[0].label);
-    row.addCell(nf(results[0].confidence, 0, 2));
+    row.setString(0, `<img src="${img.elt.src}" width="100">`);
+    row.setString(1, results[0].label);
+    row.setNum(2, results[0].confidence);
 
     resultDiv.child(resultTable);
     
@@ -76,6 +83,11 @@ function gotResult(error, results) {
     correctButton.style('display', 'inline');
     incorrectButton.style('display', 'inline');
   }
+}
+
+function saveClassification(isCorrect) {
+  // Hier könnten Sie den Klassifizierungsstatus speichern
+  console.log('Klassifizierung:', isCorrect ? 'Richtig' : 'Falsch');
 }
 
 function highlight() {
