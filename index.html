@@ -6,24 +6,60 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
   <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js"></script>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      padding: 20px;
+    }
+
+    #uploadTitle {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
     #drop_zone {
       border: 2px dashed #aaa;
       padding: 20px;
       text-align: center;
-      margin-top: 20px;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
+      margin-bottom: 20px;
       color: #aaa;
+    }
+
+    #resultTitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #result {
+      margin-bottom: 20px;
+    }
+
+    #thumbnail {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <h1>Drag and Drop Image Classification</h1>
+
+  <!-- Upload-Bereich -->
+  <div id="uploadTitle">Upload der Bilddatei</div>
   <div id="drop_zone">
     <p>Drag and Drop</p>
   </div>
+
+  <!-- Ergebnis-Anzeige -->
+  <div id="resultTitle">Anzeige des Ergebnisses nach dem Klassifizieren</div>
   <div id="result"></div>
+
+  <!-- Button zum manuellen Starten der Klassifizierung -->
   <button id="classifyButton">Klassifizieren</button>
+
+  <!-- Thumbnail-Anzeige -->
+  <div id="thumbnail"></div>
+
   <script src="sketch.js"></script>
 </body>
 </html>
