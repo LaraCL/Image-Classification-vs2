@@ -28,9 +28,11 @@ function setup() {
   incorrectButton.mousePressed(() => { saveClassification(false); });
 
   // Image Classifier mit MobileNet initialisieren
-  classifier = ml5.imageClassifier('MobileNet', () => {
-    console.log('Image Classifier geladen.');
-  });
+  classifier = ml5.imageClassifier('MobileNet', modelLoaded);
+}
+
+function modelLoaded() {
+  console.log('Image Classifier geladen.');
 }
 
 function gotFile(file) {
