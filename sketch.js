@@ -17,7 +17,7 @@ function setup() {
   resultDiv = select('#result');
 
   classifyButton = select('#classifyButton');
-  classifyButton.mousePressed(classifyImage); // Klick-Event für Klassifizieren-Button
+  classifyButton.mousePressed(classifyImage);
 
   correctButton = select('#correctButton');
   correctButton.mousePressed(() => { saveClassification(true); });
@@ -59,9 +59,7 @@ function gotResult(error, results) {
   if (error) {
     console.error(error);
   } else {
-    let confidencePercent = results[0].confidence * 100;
-    let confidenceBar = '<div style="width:' + confidencePercent + '%; background-color: green; height: 20px;"></div>';
-    resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${confidenceBar} ${nf(confidencePercent, 0, 2)}%`);
+    resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${nf(results[0].confidence * 100, 0, 2)}%`);
 
     let thumbnailElement = select('#thumbnail');
     thumbnailElement.html('');
@@ -87,7 +85,7 @@ function saveClassification(isCorrect) {
 
     loadLastClassifications();
   } else {
-    console.log('Es wurde noch kein Bild hochgeladen.');
+    console.log('Es wurde noch kein Bild hochgeladen.'); // Falls hier immer noch eine Fehlermeldung angezeigt wird, überprüfe deine Anwendung auf weitere Probleme.
   }
 }
 
