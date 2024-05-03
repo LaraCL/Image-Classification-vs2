@@ -20,9 +20,11 @@ function setup() {
   classifyButton.mousePressed(classifyImage);
 
   correctButton = select('#correctButton');
+  correctButton.style('display', 'inline'); 
   correctButton.mousePressed(() => { saveClassification(true); });
 
   incorrectButton = select('#incorrectButton');
+  incorrectButton.style('display', 'inline');
   incorrectButton.mousePressed(() => { saveClassification(false); });
 
   classifier = ml5.imageClassifier('MobileNet', () => {
