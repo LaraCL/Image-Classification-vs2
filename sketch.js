@@ -50,7 +50,7 @@ function gotFile(file) {
 
 function classifyImage() {
   if (img) {
-    classifier.classify(img.elt, gotResult);
+    classifier.classify(img, gotResult); // img statt img.elt übergeben
   } else {
     console.log('Es wurde noch kein Bild hochgeladen.');
   }
