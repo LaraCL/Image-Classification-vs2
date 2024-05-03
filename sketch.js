@@ -4,12 +4,13 @@ let resultDiv;
 let classifyButton;
 let correctButton;
 let incorrectButton;
+let dropZone; // Globale Variable für dropZone definieren
 
 function setup() {
   createCanvas(400, 400);
   
   // Drag-and-Drop Bereich konfigurieren
-  let dropZone = select('#drop_zone');
+  dropZone = select('#drop_zone'); // dropZone initialisieren
   dropZone.dragOver(highlight);
   dropZone.dragLeave(unhighlight);
   dropZone.drop(gotFile);
@@ -89,3 +90,25 @@ function gotResult(error, results) {
     img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
   }
 }
+
+function highlight() {
+  dropZone.style('background-color', '#eee');
+}
+
+function unhighlight() {
+  dropZone.style('background-color', '');
+}
+
+// Verhindern des Standardverhaltens beim Drag-and-Drop
+window.ondragover = function (e) {
+  e.preventDefault();
+  return false;
+};
+
+window.ondrop = function (e) {
+  e.preventDefault();
+  return false;
+};
+
+// Laden der letzten Klassifizierungen beim Laden der Seite
+window.onload = loadLastClassifications;
