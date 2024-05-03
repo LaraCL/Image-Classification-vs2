@@ -59,7 +59,9 @@ function gotResult(error, results) {
   if (error) {
     console.error(error);
   } else {
-    resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${nf(results[0].confidence * 100, 0, 2)}%`);
+    let confidencePercent = results[0].confidence * 100;
+    let confidenceBar = '<div style="width:' + confidencePercent + '%; background-color: green; height: 20px;"></div>';
+    resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${confidenceBar} ${nf(confidencePercent, 0, 2)}%`);
 
     let thumbnailElement = select('#thumbnail');
     thumbnailElement.html('');
