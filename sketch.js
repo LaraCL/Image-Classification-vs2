@@ -11,17 +11,21 @@ function setup() {
   dropZone.dragOver(highlight);
   dropZone.dragLeave(unhighlight);
   dropZone.drop(gotFile);
-  // Ergebnisanzeige erstellen
-  resultDiv = select('#result');
-  // Buttons für die Klassifizierung
-  classifyButton = select('#classifyButton');
+   // Ergebnisanzeige erstellen
+   resultDiv = select('#result');
+
+   // Buttons für Klassifizierung
+   // Buttons für die Klassifizierung
+   classifyButton = select('#classifyButton');
+   classifyButton.mousePressed(() => { classifyImage(null); }); // Null bedeutet automatische Klassifizierung
+   
    classifyButton.mousePressed(classifyImage);
 
    correctButton = select('#correctButton');
-   correctButton.mousePressed(() => { saveClassification(true); });
+   correctButton.mousePressed(() => { classifyImage(true); });
 
    incorrectButton = select('#incorrectButton');
-   incorrectButton.mousePressed(() => { saveClassification(false); });
+   incorrectButton.mousePressed(() => { classifyImage(false); });
 
    // Image Classifier mit MobileNet initialisieren
    classifier = ml5.imageClassifier('MobileNet', () => {
@@ -30,63 +34,124 @@ function setup() {
 }
 function gotFile(file) {
   if (file.type === 'image') {
-    // Das Bild als p5.Element-Objekt erstellen
-    img = createImg(file.data, 'Uploaded Image', '', () => {
-      img.hide(); // Bild vorübergehend ausblenden
-    });
-  } else {
-    console.log('Es wurde keine Bilddatei hochgeladen.');
-  }
-}
-function classifyImage() {
-  if (img) {
-    classifier.classify(img.elt, gotResult);
-  } else {
-    console.log('Es wurde noch kein Bild hochgeladen.');
-  }
+     // Das Bild als p5.Element-Objekt erstellen
+     img = createImg(file.data, 'Uploaded Image', '', () => {
+       img.hide(); // Bild vorübergehend ausblenden
+
+       // Größe des Thumbnails festlegen
+       let thumbnailSize = 200;
+
+       // Berechne die Position des Thumbnails in der Mitte des drop_zone
+       let dropX = dropZone.position().x;
+       let dropY = dropZone.position().y;
+       let x = dropX + (dropZone.width - thumbnailSize) / 2;
+       let y = dropY + (dropZone.height - thumbnailSize) / 2;
+
+       // Bild anzeigen und positionieren
+       img.size(thumbnailSize, thumbnailSize);
+       img.position(x, y);
+
+       // Klassifizierung des Bildes aufrufen, wenn automatische Klassifizierung nicht aktiviert ist
+       if (classifyButton.elt.disabled) {
+         classifier.classify(img.elt, gotResult);
+       }
+     });
+   } else {
+     console.log('Es wurde keine Bilddatei hochgeladen.');
+   }
+ }
+
+ function classifyImage(isCorrect) {
+ function classifyImage() {
+   if (img) {
+     if (isCorrect !== null) {
+       // Bild manuell klassifizieren (korrekt oder falsch)
+       saveClassification(isCorrect);
+     } else {
+       // Automatische Klassifizierung auslösen
+       classifier.classify(img.elt, gotResult);
+     }
+     classifier.classify(img.elt, gotResult);
+   } else {
+     console.log('Es wurde noch kein Bild hochgeladen.');
+   }
 }
 function gotResult(error, results) {
   if (error) {
      console.error(error);
    } else {
      // Ergebnis anzeigen
+     resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${nf(results[0].confidence, 0, 2)}`);
      resultDiv.html('');
-     resultDiv.html(''); // Vorheriges Ergebnis löschen
 
+     // Thumbnail im #thumbnail-Bereich anzeigen
      // Thumbnail-Anzeige
      let thumbnailElement = select('#thumbnail');
-    thumbnailElement.html(''); // Vorhandenes Inhalt löschen
-    img.show(); // Bild sichtbar machen
-    img.size(200, 200); // Größe festlegen
-    img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
-
-     // Ergebnis in Tabellenform anzeigen
-     let resultTable = createTable();
-     resultTable.addColumn('string');
-     resultTable.addColumn('string');
-     resultTable.addColumn('number');
-
-     let row = resultTable.addRow();
-     row.addCell(`<img src="${img.elt.src}" width="100">`);
-     row.addCell(results[0].label);
-     row.addCell(nf(results[0].confidence, 0, 2));
-     row.setString(0, `<img src="${img.elt.src}" width="100">`);
-     row.setString(1, results[0].label);
-     row.setNum(2, results[0].confidence);
-
-     resultDiv.child(resultTable);
-
-    // Buttons für korrekte und inkorrekte Klassifizierung anzeigen
-    correctButton.style('display', 'inline');
-    incorrectButton.style('display', 'inline');
+     thumbnailElement.html(''); // Vorhandenes Inhalt löschen
+     img.show(); // Bild sichtbar machen
+     img.size(200, 200); // Größe festlegen
+     img.parent('thumbnail'); // Bild in #thumbnail-Bereich einfügen
    }
  }
 
  function saveClassification(isCorrect) {
-   // Hier könnten Sie den Klassifizierungsstatus speichern
-   console.log('Klassifizierung:', isCorrect ? 'Richtig' : 'Falsch');
+   // Speichern der Klassifizierung (richtig oder falsch)
+   let data = {
+     label: resultDiv.elt.textContent.split(':')[1].trim(),
+     confidence: parseFloat(resultDiv.elt.textContent.split(':')[3].trim()),
+     thumbnailUrl: img.elt.src,
+     isCorrect: isCorrect
+   };
+
+   let classificationsKey = isCorrect ? 'correctClassifications' : 'incorrectClassifications';
+   let classifications = JSON.parse(localStorage.getItem(classificationsKey)) || [];
+   classifications.push(data);
+   localStorage.setItem(classificationsKey, JSON.stringify(classifications));
+
+   // Aktualisiere die Tabellen mit den letzten Klassifizierungen
+   loadLastClassifications();
  }
 
+ // Funktion zum Laden der letzten Klassifizierungen in die Tabellen
+ function loadLastClassifications() {
+   let correctClassifications = JSON.parse(localStorage.getItem('correctClassifications')) || [];
+   let incorrectClassifications = JSON.parse(localStorage.getItem('incorrectClassifications')) || [];
+
+   fillTable('correctBody', correctClassifications);
+   fillTable('incorrectBody', incorrectClassifications);
+ }
+
+ // Hilfsfunktion zum Füllen einer Tabelle mit Klassifizierungsdaten
+ function fillTable(tableId, data) {
+   let tableBody = document.getElementById(tableId);
+   tableBody.innerHTML = ''; // Tabelle leeren
+
+   data.slice(-3).forEach(item => {
+     let row = tableBody.insertRow();
+     let thumbnailCell = row.insertCell(0);
+     let labelCell = row.insertCell(1);
+     let confidenceCell = row.insertCell(2);
+
+     thumbnailCell.innerHTML = `<img src="${item.thumbnailUrl}" width="100">`;
+     labelCell.textContent = item.label;
+     confidenceCell.textContent = nf(item.confidence, 0, 2);
+   });
+     // Ergebnis in Tabellenform anzeigen
+     let resultTable = createTable();
+     let row = resultTable.addRow();
+     row.addCell(`<img src="${img.elt.src}" width="100">`);
+     row.addCell(results[0].label);
+     row.addCell(nf(results[0].confidence, 0, 2));
+
+     resultDiv.child(resultTable);
+
+     // Buttons für korrekte und inkorrekte Klassifizierung anzeigen
+     correctButton.style('display', 'inline');
+     incorrectButton.style('display', 'inline');
+   }
+ }
+
+ // Drag-and-Drop-Stilfunktionen
  function highlight() {
    select('#drop_zone').style('background-color', '#eee');
  }
@@ -99,6 +164,9 @@ window.ondragover = function (e) {
   return false;
 };
 window.ondrop = function (e) {
-  e.preventDefault();
-  return false;
-};
+   e.preventDefault();
+   return false;
+ };
+
+ // Laden der letzten Klassifizierungen beim Laden der Seite
+ window.onload = loadLastClassifications;
