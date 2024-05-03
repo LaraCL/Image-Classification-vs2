@@ -82,7 +82,7 @@ function gotResult(error, results) {
    } else {
      // Ergebnis anzeigen
      resultDiv.html(`<strong>Label:</strong> ${results[0].label}<br><strong>Confidence:</strong> ${nf(results[0].confidence, 0, 2)}`);
-     resultDiv.html('');
+     // resultDiv.html('');
 
      // Thumbnail im #thumbnail-Bereich anzeigen
      // Thumbnail-Anzeige
