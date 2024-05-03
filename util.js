@@ -1,9 +1,10 @@
 // Funktion zum Speichern einer Klassifizierung in der Datenbank
-function saveClassification(isCorrect, label, confidence) {
+function saveClassification(isCorrect) {
   let data = {
-    label: label,
-    confidence: confidence,
-    thumbnailUrl: img.elt.src // URL des Bildes
+    label: resultDiv.elt.textContent.split(':')[1].trim(),
+    confidence: parseFloat(resultDiv.elt.textContent.split(':')[3].trim()),
+    thumbnailUrl: img.elt.src,
+    isCorrect: isCorrect
   };
 
   let classificationsKey = isCorrect ? 'correctClassifications' : 'incorrectClassifications';
