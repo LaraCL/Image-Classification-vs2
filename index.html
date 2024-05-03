@@ -52,22 +52,6 @@
 <body>
   <h1>Drag and Drop Image Classification</h1>
 
-  <!-- Drag-and-Drop-Zone -->
-  <div id="drop_zone" ondragover="event.preventDefault()" ondrop="gotFile(event)">
-    <p>Drag and Drop</p>
-  </div>
-
-  <!-- Ergebnisanzeige -->
-  <div id="result"></div>
-
-  <!-- Thumbnail-Anzeige -->
-  <div id="thumbnail"></div>
-
-  <!-- Buttons für die Klassifizierung -->
-  <button id="classifyButton">Klassifizieren</button>
-  <button id="correctButton" style="display: none;">Richtig klassifiziert</button>
-  <button id="incorrectButton" style="display: none;">Falsch klassifiziert</button>
-
   <!-- Tabellen für die letzten Klassifizierungen -->
   <h2>Zuletzt korrekt klassifizierte Fälle</h2>
   <table id="correctTable">
@@ -91,3 +75,19 @@
     </thead>
     <tbody id="incorrectBody"></tbody>
   </table>
+
+  <!-- Drag-and-Drop-Zone -->
+  <div id="drop_zone" ondragover="event.preventDefault()" ondrop="gotFile(event)">
+    <p>Drag and Drop</p>
+  </div>
+
+  <!-- Thumbnail-Anzeige -->
+  <div id="thumbnail"></div>
+
+  <!-- Ergebnisanzeige -->
+  <div id="result"></div>
+  
+  <!-- Buttons für die Klassifizierung -->
+  <button id="classifyButton">Klassifizieren</button>
+  <button id="correctButton" style="display: none;">Richtig klassifiziert</button>
+  <button id="incorrectButton" style="display: none;">Falsch klassifiziert</button>
